@@ -51,7 +51,11 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public void displayRobots(Graphics g) {
-		
+		g.setColor(Color.red);
+		for (Robot r: field.robots) {
+			g.fillOval(convertX(r.getX()), convertY(r.getY()), 
+					   FIELD_SQUARE_SIZE, FIELD_SQUARE_SIZE);
+		}
 	}
 	
 	public void displayGoal(Graphics g) {

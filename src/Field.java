@@ -19,6 +19,12 @@ public class Field {
 		initGrid(width, height);
 		initRandomGoal();
 		initRandomObstacles(5);
+		initRobots();
+	}
+	
+	private void initRobots() {
+		robots = new Robot[1];
+		robots[0] = new Robot(1, 1);
 	}
 	
 	private void initRandomObstacles(int num) {

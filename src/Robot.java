@@ -3,7 +3,7 @@ public class Robot {
 	private int x;
 	private int y;
 	
-	public void Robot(int x, int y) {
+	public Robot(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
