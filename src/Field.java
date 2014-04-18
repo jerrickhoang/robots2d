@@ -7,8 +7,9 @@ import java.util.Random;
 public class Field {
 	public int[][] grid;
 	public Boolean[][] visited;
-	public Goal goal;
 	public Robot[] robots;
+	public Obstacle[] obstacles;
+	public Goal goal;
 	private int width;
 	private int height;
 	
@@ -17,6 +18,22 @@ public class Field {
 		this.height = height;
 		initGrid(width, height);
 		initRandomGoal();
+		initRandomObstacles(5);
+	}
+	
+	private void initRandomObstacles(int num) {
+		obstacles = new Obstacle[num];
+		Random r = new Random();
+		int x, y;
+		for (int i = 0; i < num; i++) {
+			do {
+				x = r.nextInt(width);
+				y = r.nextInt(height);
+			} while (x == goal.getX() && y == goal.getY());
+			Obstacle tempOb = new Obstacle(x, y);
+			obstacles[i] = tempOb;
+		}
+		
 	}
 	
 	private void initGrid(int width, int height) {
@@ -46,6 +63,18 @@ public class Field {
 		return visited[x][y];
 	}
 	
+	private Boolean isValid(int x, int y) {
+		return !isVisited(x, y) && notObstacle(x, y);
+	}
+	
+	private Boolean notObstacle(int x, int y) {
+		for (int i = 0; i < obstacles.length; i ++) {
+			if (obstacles[i].getX() == x && obstacles[i].getY() == y)
+				return false;
+		}
+		return true;
+	}
+	
 	public void printGrid() {
 		for (int i = 0; i < width; i ++) {
 			for (int j = 0; j < height; j++) {
@@ -69,7 +98,7 @@ public class Field {
 			for (int i = -1; i < 2; i ++) {
 				for (int j = -1; j < 2; j++) {
 					if (i == 0 && j == 0) continue;
-					if (inRange (cur.x + i, cur.y + j) && !isVisited(cur.x + i, cur.y + j)) {
+					if (inRange (cur.x + i, cur.y + j) && isValid(cur.x + i, cur.y + j)) {
 						Point t = new Point(cur.x + i, cur.y + j);
 						visited[t.x][t.y] = true;
 						nextLevel.add(t);
