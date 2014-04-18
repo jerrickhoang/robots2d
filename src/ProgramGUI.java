@@ -1,7 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.color.ColorSpace;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -40,12 +40,31 @@ public class ProgramGUI extends JFrame {
 	public void displayField(Graphics g) {
 		g.setColor(Color.gray);
 		for (int i = 0; i < field.height + 1; i ++) {
-			g.drawLine(FIELD_POSITION_X, FIELD_POSITION_Y + i * FIELD_SQUARE_SIZE, 
-					   FIELD_POSITION_X + (field.width) * FIELD_SQUARE_SIZE, FIELD_POSITION_Y + i * FIELD_SQUARE_SIZE);
+			g.drawLine(convertX(0), convertY(i), convertX(field.width), convertY(i));
 		}
 		for (int i = 0; i < field.width + 1; i ++) {
-			g.drawLine(FIELD_POSITION_X + i * FIELD_SQUARE_SIZE, FIELD_POSITION_Y,
-					   FIELD_POSITION_X + i * FIELD_SQUARE_SIZE, FIELD_POSITION_Y + (field.height) * FIELD_SQUARE_SIZE);
+			g.drawLine(convertX(i), convertY(0), convertX(i), convertY(field.height));
+		}
+		displayRobots(g);
+		displayGoal(g);
+		displayObstacles(g);
+	}
+	
+	public void displayRobots(Graphics g) {
+		
+	}
+	
+	public void displayGoal(Graphics g) {
+		g.setColor(Color.green);
+		g.fillRect(convertX(field.goal.getX()), convertY(field.goal.getY()), 
+				   FIELD_SQUARE_SIZE, FIELD_SQUARE_SIZE);
+	}
+	
+	public void displayObstacles(Graphics g) {
+		g.setColor(Color.gray);
+		for (Obstacle ob : field.obstacles) {
+			g.fillRect(convertX(ob.getX()), convertY(ob.getY()), 
+					   FIELD_SQUARE_SIZE, FIELD_SQUARE_SIZE);
 		}
 	}
 	
@@ -100,5 +119,19 @@ public class ProgramGUI extends JFrame {
 		}
 		
 		
+	}
+
+	public Point getCenter(int row, int col) {
+		int x = convertX(row);
+		int y = convertY(col);
+		return new Point(x + FIELD_SQUARE_SIZE/2, y + FIELD_SQUARE_SIZE/2);
+	}
+	
+	public int convertX(int col) {
+		return FIELD_POSITION_X + col * FIELD_SQUARE_SIZE;
+	}
+	
+	public int convertY(int row) {
+		return FIELD_POSITION_Y + row * FIELD_SQUARE_SIZE;
 	}
 }
