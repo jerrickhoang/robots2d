@@ -2,10 +2,12 @@
 public class Robot {
 	private int x;
 	private int y;
+	private Goal goal;
 	
-	public Robot(int x, int y) {
+	public Robot(int x, int y, Goal goal) {
 		this.x = x;
 		this.y = y;
+		this.goal = goal;
 	}
 	
 	public int getX() {

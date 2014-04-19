@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class Field {
 	public int[][] grid;
+	public Point[][] vectorField;
 	public Boolean[][] visited;
 	public Robot[] robots;
 	public Obstacle[] obstacles;
@@ -20,11 +21,21 @@ public class Field {
 		initRandomGoal();
 		initRandomObstacles(5);
 		initRobots();
+		initVectorField(width, height);
+	}
+	
+	private void initVectorField(int width, int height) {
+		vectorField = new Point[height][width];
+		for (int i = 0; i < height; i ++) {
+			for (int j = 0; j < width; j ++) {
+				vectorField[j][i] = new Point(0, 0);
+			}
+		}
 	}
 	
 	private void initRobots() {
 		robots = new Robot[1];
-		robots[0] = new Robot(1, 1);
+		robots[0] = new Robot(1, 1, goal);
 	}
 	
 	private void initRandomObstacles(int num) {
@@ -50,6 +61,14 @@ public class Field {
 				grid[i][j] = 0;
 				visited[i][j] = false;
 			}
+		}
+	}
+	
+	public void run() {
+		for (Robot r: robots) {
+			Point grad = vectorField[r.getY()][r.getX()];
+			r.setX(r.getX() + grad.x);
+			r.setY(r.getY() + grad.y);
 		}
 	}
 	
@@ -115,6 +134,27 @@ public class Field {
 				curDistance++;
 				curLevel = nextLevel;
 				nextLevel = new LinkedList<Point>();
+			}
+		}
+	}
+
+	public void generateVectorField() {
+		for (int i = 0; i < height; i ++) {
+			for (int j = 0; j < width; j ++) {
+				if (!notObstacle(i, j)) continue;
+				int min = Integer.MAX_VALUE;
+				Point grad = new Point(0, 0);
+				for (int r = -1; r < 2; r++) {
+					for (int c = -1; c < 2; c++) {
+						if (r == 0 && c == 0) continue;
+						if (isValid(i + r, j + c) && grid[i + r][j + c] > min) {
+							min = grid[i + r][j + c];
+							grad.x = j + c;
+							grad.y = i + r;
+						}
+					}
+				}
+				vectorField[j][i] = grad;
 			}
 		}
 	}

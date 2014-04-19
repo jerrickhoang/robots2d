@@ -2,12 +2,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 
 public class ProgramGUI extends JFrame {
@@ -18,14 +22,25 @@ public class ProgramGUI extends JFrame {
 	private static final int FIELD_POSITION_X = 100;
 	private static final int FIELD_POSITION_Y = 100;
 	private static final int FIELD_SQUARE_SIZE = 30;
+	
+	private static final int GAME_SPEED = 50;
 	private Field field;
-
+	private javax.swing.Timer timer;
+	
 	public ProgramGUI(Field field) {
 		super("Robots2D");
 		setBounds (0, 0, WIDTH_OF_FRAME, HEIGHT_OF_FRAME);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.field = field;
+		timer = new Timer(GAME_SPEED, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				programLoop();
+			}
+		});
 		
 		JPanel pane = new JPanel();
 		add(pane, BorderLayout.CENTER);
@@ -33,8 +48,28 @@ public class ProgramGUI extends JFrame {
 		pane.addMouseListener(new MouseHandler());
 		pane.addMouseMotionListener(new MouseHandler());
 		
+		JButton button = new JButton("Start");
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				timer.setInitialDelay(500);
+				timer.setCoalesce(true);
+				
+				timer.start();
+				
+			}
+		});
+		pane.add(button);
 		
 		setVisible(true);
+		
+	}
+	
+	public void programLoop() {
+		field.run();
+		repaint();
 	}
 	
 	public void displayField(Graphics g) {
