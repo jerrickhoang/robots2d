@@ -23,7 +23,7 @@ public class ProgramGUI extends JFrame {
 	private static final int FIELD_POSITION_Y = 100;
 	private static final int FIELD_SQUARE_SIZE = 30;
 	
-	private static final int GAME_SPEED = 50;
+	private static final int GAME_SPEED = 30;
 	private Field field;
 	private javax.swing.Timer timer;
 	
@@ -68,8 +68,14 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public void programLoop() {
-		field.run();
-		repaint();
+		if (field.finished()) {
+			System.out.println("get here");
+			timer.stop();
+		}
+		else {
+			field.run();
+			repaint();
+		}
 	}
 	
 	public void displayField(Graphics g) {

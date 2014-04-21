@@ -147,16 +147,33 @@ public class Field {
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
 						if (r == 0 && c == 0) continue;
-						if (isValid(i + r, j + c) && grid[i + r][j + c] > min) {
+						if (inRange(i + r, j + c) && grid[i + r][j + c] < min) {
 							min = grid[i + r][j + c];
-							grad.x = j + c;
-							grad.y = i + r;
+							grad.x = c;
+							grad.y = r;
 						}
 					}
 				}
 				vectorField[j][i] = grad;
 			}
 		}
+	}
+	
+	public void printVectorField() {
+		
+		for (int i = 0; i < height; i ++) {
+			for (int j = 0; j < width; j ++) {
+				System.out.print("(" + vectorField[j][i].x + " " + vectorField[j][i].y + ")");
+			}
+			System.out.println();
+		}
+	}
+	
+	public Boolean finished() {
+		for (Robot r : robots) {
+			if (!r.reachedGoal()) return false;
+		}
+		return true;
 	}
 }
 

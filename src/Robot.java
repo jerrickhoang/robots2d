@@ -25,4 +25,8 @@ public class Robot {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	public Boolean reachedGoal() {
+		return (x == goal.getX() && y == goal.getY());
+	}
 }
