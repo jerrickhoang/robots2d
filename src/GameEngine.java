@@ -3,6 +3,11 @@ public class GameEngine {
 	
 	public static void main(String[] args) {
 		final Field field = new Field(10, 10);
+		FlowField flowField = new FlowField(field);
+		flowField.waveFront();
+		flowField.generateVectorField();
+		flowField.printGrid();
+		flowField.printVectorField();
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override

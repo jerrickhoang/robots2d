@@ -51,13 +51,13 @@ public class FlowField implements Algorithm{
 	public void generateVectorField() {
 		for (int i = 0; i < field.height; i ++) {
 			for (int j = 0; j < field.width; j ++) {
-				if (!notObstacle(i, j)) continue;
+				if (!notObstacle(j, i)) continue;
 				int min = Integer.MAX_VALUE;
 				Point grad = new Point(0, 0);
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
 						if (r == 0 && c == 0) continue;
-						if (field.inRange(i + r, j + c) && grid[i + r][j + c] < min) {
+						if (field.inRange(i + r, j + c) && notObstacle(j + c, i + r) && grid[i + r][j + c] < min) {
 							min = grid[i + r][j + c];
 							grad.x = c;
 							grad.y = r;
