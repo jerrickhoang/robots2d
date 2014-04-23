@@ -7,11 +7,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 
 public class ProgramGUI extends JFrame {
@@ -23,24 +23,16 @@ public class ProgramGUI extends JFrame {
 	private static final int FIELD_POSITION_Y = 100;
 	private static final int FIELD_SQUARE_SIZE = 30;
 	
-	private static final int GAME_SPEED = 30;
 	private Field field;
-	private javax.swing.Timer timer;
+	private List<Solution> solutions;
 	
-	public ProgramGUI(Field field) {
+	public ProgramGUI(final Field field) {
 		super("Robots2D");
 		setBounds (0, 0, WIDTH_OF_FRAME, HEIGHT_OF_FRAME);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.field = field;
-		timer = new Timer(GAME_SPEED, new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				programLoop();
-			}
-		});
+		solutions = null;
 		
 		JPanel pane = new JPanel();
 		add(pane, BorderLayout.CENTER);
@@ -48,16 +40,14 @@ public class ProgramGUI extends JFrame {
 		pane.addMouseListener(new MouseHandler());
 		pane.addMouseMotionListener(new MouseHandler());
 		
-		JButton button = new JButton("Start");
+		JButton button = new JButton("Find Path");
 		button.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				timer.setInitialDelay(500);
-				timer.setCoalesce(true);
-				
-				timer.start();
+				Algorithm flowField = new FlowField(field);
+				solutions = flowField.solve();
+				repaint();
 				
 			}
 		});
@@ -67,12 +57,13 @@ public class ProgramGUI extends JFrame {
 		
 	}
 	
-	public void programLoop() {
-		if (field.finished()) {
-			System.out.println("get here");
-			timer.stop();
-		}
-
+	public void visualizeSolutions(List<Solution> solutions, Graphics g) {
+		for (Solution s : solutions) 
+			visualizeSolution(s, g);
+	}
+	
+	public void visualizeSolution(Solution s, Graphics g) {
+		System.out.print("get here");
 	}
 	
 	public void displayField(Graphics g) {
@@ -113,6 +104,10 @@ public class ProgramGUI extends JFrame {
 	public void paint(Graphics g) {
 		super.paint(g);
 		displayField(g);
+		
+		if (solutions != null) {
+			visualizeSolutions(solutions, g);
+		}
 		
 	}
 	

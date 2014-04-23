@@ -64,7 +64,7 @@ public class FlowField implements Algorithm{
 						}
 					}
 				}
-				vectorField[j][i] = grad;
+				vectorField[i][j] = grad;
 			}
 		}
 	}
@@ -73,7 +73,7 @@ public class FlowField implements Algorithm{
 		
 		for (int i = 0; i < field.height; i ++) {
 			for (int j = 0; j < field.width; j ++) {
-				System.out.print("(" + vectorField[j][i].x + " " + vectorField[j][i].y + ")");
+				System.out.print("(" + vectorField[i][j].x + " " + vectorField[i][j].y + ")");
 			}
 			System.out.println();
 		}
@@ -106,13 +106,22 @@ public class FlowField implements Algorithm{
 		Point start = new Point(r.getX(), r.getY());
 		Point end = start;
 		
+		System.out.println("Robot at " + r.getX() + " " + r.getY());
+		System.out.println("Goal at " + field.goal.getX() + " " + field.goal.getY());
+		
 		sol.add(start);
-		while (end.x != field.goal.getX() && end.y != field.goal.getY()) {
-			int x = start.x;
-			int y = start.y;
+		int step = 0;
+		while (end.x != field.goal.getX() || end.y != field.goal.getY()) {
+			step ++;
+			end = sol.peek();
+			int x = end.x;
+			int y = end.y;
+			System.out.println(x + " " + y);
 			Point next = new Point(x + vectorField[y][x].x, y + vectorField[y][x].y);
 			sol.add(next);
+			if (step > field.width * field.height) return null;
 		}
+		
 		return sol;
 	}
 	

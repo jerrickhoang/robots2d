@@ -6,8 +6,11 @@ public class GameEngine {
 		FlowField flowField = new FlowField(field);
 		flowField.waveFront();
 		flowField.generateVectorField();
+		
+		
 		flowField.printGrid();
 		flowField.printVectorField();
+		if (flowField.solve() == null) System.out.println("cannot solve");
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
