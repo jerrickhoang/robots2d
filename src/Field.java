@@ -73,11 +73,15 @@ public class Field {
 		return (goal.getX() == x) && (goal.getY() == y);
 	}
 	
-	public Boolean isRobot(int x, int y) {
-		for (Robot r : robots) {
-			if (r.getX() == x && r.getY() == y) return true;
+	public int getRobotByCoordinate(int x, int y) {
+		for (int i = 0; i < robots.size(); i++) {
+			if (robots.get(i).getX() == x && robots.get(i).getY() == y) return i;
 		}
-		return false;
+		return -1;
+	}
+	
+	public Boolean isRobot(int x, int y) {
+		return getRobotByCoordinate(x, y) != -1;
 	}
 
 	public Boolean isObstacle(int x, int y) {

@@ -26,6 +26,10 @@ public class ProgramGUI extends JFrame {
 	private Field field;
 	private List<Solution> solutions;
 	
+	public int pressedRobot = -1;
+	public Boolean pressedGoal = false;
+	
+	
 	public ProgramGUI(Field field) {
 		super("Robots2D");
 		setBounds (0, 0, WIDTH_OF_FRAME, HEIGHT_OF_FRAME);
@@ -147,10 +151,24 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public class MouseHandler implements MouseListener, MouseMotionListener {
+		
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
 			// TODO Auto-generated method stub
+			System.out.println("Dragging at " + e.getX() + " " + e.getY());
+			int x = XToCol(e.getX()); int y = YToRow(e.getY());
+			if (pressedGoal) {
+				System.out.println("dragging goal");
+				field.goal.setX(x);
+				field.goal.setY(y);
+				repaint();
+			}
+			if (pressedRobot != -1) {
+				field.robots.get(pressedRobot).setX(x);
+				field.robots.get(pressedRobot).setY(y);
+				repaint();
+			}
 		}
 
 		@Override
@@ -191,13 +209,18 @@ public class ProgramGUI extends JFrame {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+			System.out.println("pressed at " + e.getX() + " " + e.getY());
+			int x = XToCol(e.getX()); int y = YToRow(e.getY());
+			pressedGoal = field.isGoal(x, y);
+			pressedRobot = field.getRobotByCoordinate(x, y);
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
 			System.out.println("released at " + e.getX() + " " + e.getY());
+			pressedGoal = false; 
+			pressedRobot = -1;
 		}
 		
 		
