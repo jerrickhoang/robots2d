@@ -54,19 +54,43 @@ public class FlowField implements Algorithm{
 				if (!notObstacle(j, i)) continue;
 				int min = Integer.MAX_VALUE;
 				Point grad = new Point(0, 0);
-				for (int r = -1; r < 2; r++) {
-					for (int c = -1; c < 2; c++) {
-						if (r == 0 && c == 0) continue;
-						if (field.inRange(i + r, j + c) && notObstacle(j + c, i + r) && grid[i + r][j + c] < min) {
-							min = grid[i + r][j + c];
-							grad.x = c;
-							grad.y = r;
-						}
-					}
-				}
+				min = exploreNeighbors(i, j, min, grad);
 				vectorField[i][j] = grad;
 			}
 		}
+	}
+
+	private int exploreNeighbors(int i, int j, int min, Point grad) {
+		//Von Neumann
+		for (int k = -1; k < 2; k ++)
+			min = exploreNeighbor(i, j, min, grad, k, 0);
+		for (int k = -1; k < 2; k ++)
+			min = exploreNeighbor(i, j, min, grad, 0, k);
+		
+		//Corners
+		for (int k = -1; k < 2; k ++)
+			min = exploreNeighbor(i, j, min, grad, k, k);
+		for (int k = -1; k < 2; k ++)
+			min = exploreNeighbor(i, j, min, grad, -k, k);
+	
+		
+//		for (int r = -1; r < 2; r++) {
+//			for (int c = -1; c < 2; c++) {
+//				min = exploreNeighbor(i, j, min, grad, r, c);
+//			}
+//		}
+		return min;
+	}
+
+	private int exploreNeighbor(int i, int j, int min, Point grad, int r, int c) {
+		if (r == 0 && c == 0)
+			return min;
+		if (field.inRange(i + r, j + c) && notObstacle(j + c, i + r) && grid[i + r][j + c] < min) {
+			min = grid[i + r][j + c];
+			grad.x = c;
+			grad.y = r;
+		}
+		return min;
 	}
 	
 	public void printVectorField() {
