@@ -1,10 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
 public class Field {
 
-	public Robot[] robots;
-	public Obstacle[] obstacles;
+	public List<Robot> robots;
+	public List<Obstacle> obstacles;
 	public Goal goal;
 	public int width;
 	public int height;
@@ -12,18 +14,22 @@ public class Field {
 	public Field(int width, int height) {
 		this.width = width;
 		this.height = height;
-		initRandomGoal();
-		initRandomObstacles(5);
+		
+		robots = new ArrayList<Robot>();
+		obstacles = new ArrayList<Obstacle>();
+		initGoal();
 		initRobots();
+		//initRandomGoal();
+		//initRandomObstacles(5);
 	}
 	
 	private void initRobots() {
-		robots = new Robot[1];
-		robots[0] = new Robot(1, 1, goal);
+		robots = new ArrayList<Robot>();
+		robots.add(new Robot(10, 6, goal));
 	}
 	
 	private void initRandomObstacles(int num) {
-		obstacles = new Obstacle[num];
+		obstacles = new ArrayList<Obstacle>();
 		Random r = new Random();
 		int x, y;
 		for (int i = 0; i < num; i++) {
@@ -31,10 +37,13 @@ public class Field {
 				x = r.nextInt(width);
 				y = r.nextInt(height);
 			} while (x == goal.getX() && y == goal.getY());
-			Obstacle tempOb = new Obstacle(x, y);
-			obstacles[i] = tempOb;
+			obstacles.add(new Obstacle(x, y));
 		}
 		
+	}
+	
+	private void initGoal() {
+		goal = new Goal(10, 13);
 	}
 	
 	private void initRandomGoal() {
@@ -54,6 +63,49 @@ public class Field {
 			if (!r.reachedGoal()) return false;
 		}
 		return true;
+	}
+
+	public void createGoal(int x, int y) {
+		goal = new Goal(x, y);
+	}
+	
+	public Boolean isGoal(int x, int y) {
+		return (goal.getX() == x) && (goal.getY() == y);
+	}
+	
+	public Boolean isRobot(int x, int y) {
+		for (Robot r : robots) {
+			if (r.getX() == x && r.getY() == y) return true;
+		}
+		return false;
+	}
+
+	public Boolean isObstacle(int x, int y) {
+		for (Obstacle o : obstacles) {
+			if (o.getX() == x && o.getY() == y) return true;
+		}
+		return false;
+	}
+	
+	public Boolean isOccupied(int x, int y) {
+		return inRange(x, y) && ( isGoal(x, y) || isRobot(x, y) || isObstacle(x, y) );
+	}
+	
+	public Boolean addObstacle(int x, int y) {
+		if (isOccupied(x, y)) return false;
+		if (!inRange(x, y)) return false;
+		obstacles.add(new Obstacle(x, y));
+		return true;
+	}
+	
+	public Boolean removeObstacle(int x, int y) {
+		for (int i = 0; i < obstacles.size(); i++) {
+			if (obstacles.get(i).getX() == x && obstacles.get(i).getY() == y) {
+				obstacles.remove(i);
+				return true;
+			}
+		}
+		return false;
 	}
 }
 

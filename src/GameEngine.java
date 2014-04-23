@@ -1,16 +1,11 @@
 
 public class GameEngine {
 	
+	public final static int FIELD_WIDTH = 20;
+	public final static int FIELD_HEIGHT = 20;
+	
 	public static void main(String[] args) {
-		final Field field = new Field(10, 10);
-		FlowField flowField = new FlowField(field);
-		flowField.waveFront();
-		flowField.generateVectorField();
-		
-		
-		flowField.printGrid();
-		flowField.printVectorField();
-		if (flowField.solve() == null) System.out.println("cannot solve");
+		final Field field = new Field(FIELD_WIDTH, FIELD_HEIGHT);
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override

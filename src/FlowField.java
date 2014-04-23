@@ -161,8 +161,8 @@ public class FlowField implements Algorithm{
 	}
 	
 	private Boolean notObstacle(int x, int y) {
-		for (int i = 0; i < field.obstacles.length; i ++) {
-			if (field.obstacles[i].getX() == x && field.obstacles[i].getY() == y)
+		for (int i = 0; i < field.obstacles.size(); i ++) {
+			if (field.obstacles.get(i).getX() == x && field.obstacles.get(i).getY() == y)
 				return false;
 		}
 		return true;

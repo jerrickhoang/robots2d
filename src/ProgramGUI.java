@@ -86,6 +86,7 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public void displayRobots(Graphics g) {
+		if (field.robots == null) return;
 		g.setColor(Color.red);
 		for (Robot r: field.robots) {
 			g.fillOval(convertX(r.getX()), convertY(r.getY()), 
@@ -94,12 +95,14 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public void displayGoal(Graphics g) {
+		if (field.goal == null) return;
 		g.setColor(Color.green);
 		g.fillRect(convertX(field.goal.getX()), convertY(field.goal.getY()), 
 				   FIELD_SQUARE_SIZE, FIELD_SQUARE_SIZE);
 	}
 	
 	public void displayObstacles(Graphics g) {
+		if (field.obstacles == null) return;
 		g.setColor(Color.gray);
 		for (Obstacle ob : field.obstacles) {
 			g.fillRect(convertX(ob.getX()), convertY(ob.getY()), 
@@ -115,6 +118,20 @@ public class ProgramGUI extends JFrame {
 			visualizeSolutions(solutions, g);
 		}
 		
+	}
+	
+	public Point getCenter(int row, int col) {
+		int x = convertX(row);
+		int y = convertY(col);
+		return new Point(x + FIELD_SQUARE_SIZE/2, y + FIELD_SQUARE_SIZE/2);
+	}
+	
+	public int convertX(int col) {
+		return FIELD_POSITION_X + col * FIELD_SQUARE_SIZE;
+	}
+	
+	public int convertY(int row) {
+		return FIELD_POSITION_Y + row * FIELD_SQUARE_SIZE;
 	}
 	
 	public class MouseHandler implements MouseListener, MouseMotionListener {
@@ -164,17 +181,5 @@ public class ProgramGUI extends JFrame {
 		
 	}
 
-	public Point getCenter(int row, int col) {
-		int x = convertX(row);
-		int y = convertY(col);
-		return new Point(x + FIELD_SQUARE_SIZE/2, y + FIELD_SQUARE_SIZE/2);
-	}
 	
-	public int convertX(int col) {
-		return FIELD_POSITION_X + col * FIELD_SQUARE_SIZE;
-	}
-	
-	public int convertY(int row) {
-		return FIELD_POSITION_Y + row * FIELD_SQUARE_SIZE;
-	}
 }
