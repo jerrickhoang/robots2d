@@ -72,10 +72,7 @@ public class ProgramGUI extends JFrame {
 			System.out.println("get here");
 			timer.stop();
 		}
-		else {
-			field.run();
-			repaint();
-		}
+
 	}
 	
 	public void displayField(Graphics g) {
