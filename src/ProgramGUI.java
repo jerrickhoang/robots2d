@@ -71,10 +71,12 @@ public class ProgramGUI extends JFrame {
 	
 	public void visualizeSolution(Solution s, Graphics g) {
 		g.setColor(Color.yellow);
+		System.out.println("path size = " + s.path.size());
 		for (int i = 0; i < s.path.size() - 1; i++) {
-			System.out.println("drawing path");
 			Point cur = getCenter(s.path.get(i).x, s.path.get(i).y);
 			Point next = getCenter(s.path.get(i+1).x, s.path.get(i+1).y);
+			System.out.println("drawing path from " + XToCol(cur.x) + " " + YToRow(cur.y) + 
+					           " to " + XToCol(next.x) + " " + YToRow(next.y));
 			g.drawLine(cur.x, cur.y, next.x, next.y);
 		}
 	}

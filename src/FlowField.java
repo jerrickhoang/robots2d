@@ -134,18 +134,16 @@ public class FlowField implements Algorithm{
 		System.out.println("Goal at " + field.goal.getX() + " " + field.goal.getY());
 		
 		sol.add(start);
-		int step = 0;
-		while (end.x != field.goal.getX() || end.y != field.goal.getY()) {
-			step ++;
-			end = sol.peek();
-			int x = end.x;
-			int y = end.y;
-			System.out.println(x + " " + y);
+		int step = 1;
+		while(true) {
+			step ++; end = sol.peek();
+			int x = end.x; int y = end.y;
 			Point next = new Point(x + vectorField[y][x].x, y + vectorField[y][x].y);
 			sol.add(next);
+			if (next.x == field.goal.getX() && next.y == field.goal.getY()) break;
 			if (step > field.width * field.height) return null;
 		}
-		
+		System.out.println("step = " + step);
 		return sol;
 	}
 	
