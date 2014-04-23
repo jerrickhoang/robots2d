@@ -16,7 +16,7 @@ public class GameEngine {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				//ProgramGUI p = new ProgramGUI(field);
+				ProgramGUI p = new ProgramGUI(field);
 			}
 		});
 	}

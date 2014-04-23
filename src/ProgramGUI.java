@@ -63,7 +63,13 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public void visualizeSolution(Solution s, Graphics g) {
-		System.out.print("get here");
+		g.setColor(Color.yellow);
+		for (int i = 0; i < s.path.size() - 1; i++) {
+			System.out.println("drawing path");
+			Point cur = getCenter(s.path.get(i).x, s.path.get(i).y);
+			Point next = getCenter(s.path.get(i+1).x, s.path.get(i+1).y);
+			g.drawLine(cur.x, cur.y, next.x, next.y);
+		}
 	}
 	
 	public void displayField(Graphics g) {
