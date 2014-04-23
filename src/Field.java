@@ -107,5 +107,12 @@ public class Field {
 		}
 		return false;
 	}
+
+	public void printObstacles() {
+		System.out.println("Obstacles = ");
+		for (Obstacle o : obstacles) {
+			System.out.println("x = " + o.getX() + ", y =" + o.getY());
+		}
+	}
 }
 
