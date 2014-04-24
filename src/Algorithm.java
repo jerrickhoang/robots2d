@@ -9,4 +9,5 @@ public interface Algorithm {
 
 	public Boolean[][] getVisitedSquares();
 	
+	public void setVisited(int i, int j, boolean b, ProgramGUI view);
 }

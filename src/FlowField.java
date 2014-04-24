@@ -192,7 +192,7 @@ public class FlowField implements Algorithm{
 		return true;
 	}
 
-	private void setVisited(int i, int j, boolean b, ProgramGUI view) {
+	public void setVisited(int i, int j, boolean b, ProgramGUI view) {
 		visited[i][j] = b;
 		if (b) {
 			//view.displayVisitedSquare();

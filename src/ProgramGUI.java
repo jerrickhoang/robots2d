@@ -9,9 +9,14 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+
+import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 
 
 public class ProgramGUI extends JFrame {
@@ -37,18 +42,33 @@ public class ProgramGUI extends JFrame {
 	
 	public ProgramGUI(Field field) {
 		super("Robots2D");
+		
+//		try {
+//			UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+		this.field = field;
+		solutions = null;
+		
 		setBounds (0, 0, WIDTH_OF_FRAME, HEIGHT_OF_FRAME);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBackground(Color.BLACK);
 		
 		this.addMouseListener(new MouseHandler());
 		this.addMouseMotionListener(new MouseHandler());
 		
-		this.field = field;
-		solutions = null;
-		
+		// Main panel
 		JPanel pane = new JPanel();
 		add(pane, BorderLayout.CENTER);
-		pane.setBackground(Color.BLACK);
+		
+		// Menu panel
+		MenuPanel menuPanel = new MenuPanel();
+		menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
+		menuPanel.setOpaque(false);
+		//menuPanel.setBackground(new Color(255, 255, 255, 70));
+		add(menuPanel, BorderLayout.EAST);
+		
 		JButton button = new JButton("Find Path");
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -57,7 +77,7 @@ public class ProgramGUI extends JFrame {
 				findPath();
 			}
 		});
-		pane.add(button);
+		menuPanel.add(button);
 		
 		setVisible(true);
 		
