@@ -85,7 +85,8 @@ public class ProgramGUI extends JFrame {
 	
 	public void findPath() {
 		repaint();
-		currentAlgo = new FlowField(this.field);
+		//currentAlgo = new FlowField(this.field);
+		currentAlgo = new Astar(this.field);
 		solutions = currentAlgo.solve(this);
 
 	}
