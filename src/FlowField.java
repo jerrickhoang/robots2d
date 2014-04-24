@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -20,12 +21,13 @@ public class FlowField implements Algorithm{
 		initVisitedGrid(field.width, field.height);
 	}
 	
-	public void waveFront() {
+	
+	public void waveFront(ProgramGUI view) {
 		Queue<Point> curLevel = new LinkedList<Point>();
 		Queue<Point> nextLevel = new LinkedList<Point>();
 		int curDistance = 0;
 		Point p = new Point(field.goal.getX(), field.goal.getY());
-		visited[p.y][p.x] = true;
+		setVisited(p.y, p.x, true, view);
 		curLevel.add(p);
 		while(curLevel.size() != 0) {
 			Point cur = curLevel.remove();
@@ -35,7 +37,7 @@ public class FlowField implements Algorithm{
 					if (i == 0 && j == 0) continue;
 					if (field.inRange (cur.x + i, cur.y + j) && isValid(cur.x + i, cur.y + j)) {
 						Point t = new Point(cur.x + i, cur.y + j);
-						visited[t.y][t.x] = true;
+						setVisited(t.y, t.x, true, view);
 						nextLevel.add(t);
 					}
 				}
@@ -113,19 +115,19 @@ public class FlowField implements Algorithm{
 		
 	}
 	
-	public List<Solution> solve() {
+	public List<Solution> solve(ProgramGUI view) {
 		
-		waveFront(); generateVectorField();
+		waveFront(view); generateVectorField();
 		
 		List<Solution> solutionList = new ArrayList<Solution>();
 		for (Robot r : field.robots) {
-			Solution solution = solve(r);
+			Solution solution = solve(r, view);
 			if (solution != null) solutionList.add(solution);
 		}
 		return solutionList;
 	}
 	
-	public Solution solve(Robot r) {
+	public Solution solve(Robot r, ProgramGUI view) {
 		Solution sol = new Solution();
 		Point start = new Point(r.getX(), r.getY());
 		Point end = start;
@@ -190,4 +192,25 @@ public class FlowField implements Algorithm{
 		return true;
 	}
 
+	private void setVisited(int i, int j, boolean b, ProgramGUI view) {
+		visited[i][j] = b;
+		if (b) {
+			//view.displayVisitedSquare();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			view.paintSquare(j, i, Color.blue);
+			view.displayGoal();
+			view.displayRobots();
+			view.displayGridLines();
+		}
+	}
+
+	
+	public Boolean[][] getVisitedSquares() {
+		return visited;
+	}
 }

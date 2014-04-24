@@ -23,11 +23,16 @@ public class ProgramGUI extends JFrame {
 	private static final int FIELD_POSITION_Y = 100;
 	private static final int FIELD_SQUARE_SIZE = 30;
 	
+	//private static final int DELAY_TIME = 1000;
+	
 	private Field field;
 	private List<Solution> solutions;
+	private Algorithm currentAlgo;
+	
 	
 	public int pressedRobot = -1;
 	public Boolean pressedGoal = false;
+	
 	
 	
 	public ProgramGUI(Field field) {
@@ -59,17 +64,19 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public void findPath() {
-		Algorithm flowField = new FlowField(this.field);
-		solutions = flowField.solve();
 		repaint();
+		currentAlgo = new FlowField(this.field);
+		solutions = currentAlgo.solve(this);
+
 	}
 	
-	public void visualizeSolutions(List<Solution> solutions, Graphics g) {
+	public void visualizeSolutions(List<Solution> solutions) {
 		for (Solution s : solutions) 
-			visualizeSolution(s, g);
+			visualizeSolution(s);
 	}
 	
-	public void visualizeSolution(Solution s, Graphics g) {
+	public void visualizeSolution(Solution s) {
+		Graphics g = getGraphics();
 		g.setColor(Color.yellow);
 		System.out.println("path size = " + s.path.size());
 		for (int i = 0; i < s.path.size() - 1; i++) {
@@ -82,6 +89,15 @@ public class ProgramGUI extends JFrame {
 	}
 	
 	public void displayField(Graphics g) {
+		//displayVisitedSquares();
+		displayRobots();
+		displayGoal();
+		displayObstacles();
+		displayGridLines();
+	}
+	
+	public void displayGridLines() {
+		Graphics g = getGraphics();
 		g.setColor(Color.gray);
 		for (int i = 0; i < field.height + 1; i ++) {
 			g.drawLine(colToX(0), RowToY(i), colToX(field.width), RowToY(i));
@@ -89,12 +105,11 @@ public class ProgramGUI extends JFrame {
 		for (int i = 0; i < field.width + 1; i ++) {
 			g.drawLine(colToX(i), RowToY(0), colToX(i), RowToY(field.height));
 		}
-		displayRobots(g);
-		displayGoal(g);
-		displayObstacles(g);
+		
 	}
 	
-	public void displayRobots(Graphics g) {
+	public void displayRobots() {
+		Graphics g = getGraphics();
 		if (field.robots == null) return;
 		g.setColor(Color.red);
 		for (Robot r: field.robots) {
@@ -103,15 +118,17 @@ public class ProgramGUI extends JFrame {
 		}
 	}
 	
-	public void displayGoal(Graphics g) {
+	public void displayGoal() {
 		if (field.goal == null) return;
+		Graphics g = getGraphics();
 		g.setColor(Color.green);
 		g.fillRect(colToX(field.goal.getX()), RowToY(field.goal.getY()), 
 				   FIELD_SQUARE_SIZE, FIELD_SQUARE_SIZE);
 	}
 	
-	public void displayObstacles(Graphics g) {
+	public void displayObstacles() {
 		if (field.obstacles == null) return;
+		Graphics g = getGraphics();
 		g.setColor(Color.gray);
 		for (Obstacle ob : field.obstacles) {
 			g.fillRect(colToX(ob.getX()), RowToY(ob.getY()), 
@@ -119,12 +136,34 @@ public class ProgramGUI extends JFrame {
 		}
 	}
 	
+	public void displayVisitedSquares() {
+		if (currentAlgo == null) return;
+		if (currentAlgo.getVisitedSquares() == null) return;
+		Graphics g = getGraphics();
+		System.out.println("displaying visited squares");
+		g.setColor(Color.blue);
+		for (int i = 0; i < field.height; i++) {
+			for (int j = 0; j < field.width; j ++) {
+				if (currentAlgo.getVisitedSquares()[i][j]) {
+					g.fillRect(colToX(j), RowToY(i), FIELD_SQUARE_SIZE, FIELD_SQUARE_SIZE);
+				}
+			}
+		}
+	}
+	
+	public void paintSquare(int i, int j, Color c) {
+		Graphics g = getGraphics();
+		g.setColor(c);
+		g.fillRect(colToX(i), RowToY(j), FIELD_SQUARE_SIZE, FIELD_SQUARE_SIZE);
+	}
+	
 	public void paint(Graphics g) {
+		System.out.println("repainting");
 		super.paint(g);
 		displayField(g);
 		
 		if (solutions != null) {
-			visualizeSolutions(solutions, g);
+			visualizeSolutions(solutions);
 		}
 		
 	}
@@ -227,5 +266,7 @@ public class ProgramGUI extends JFrame {
 		
 		
 	}
+
+
 
 }
